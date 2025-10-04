@@ -32,19 +32,21 @@ router.post('/', authenticateToken, isAdmin, validateUserCreation, async (req, r
       }
     }
 
-    // Create new user
+    // Create new user (admin-created users are automatically verified)
     const user = await User.create({
       name,
       email,
       password,
       role,
       companyId: req.user.company_id,
-      managerId: role === 'employee' ? managerId : null
+      managerId: role === 'employee' ? managerId : null,
+      isVerified: true, // Admin-created users are automatically verified
+      isManagerApprover: role === 'manager' // Auto-set manager approver for managers
     });
 
     res.status(201).json({
       success: true,
-      message: 'User created successfully. Share credentials with them.',
+      message: 'User created successfully. They can login immediately with the provided credentials.',
       data: {
         user: {
           id: user.id,
@@ -52,15 +54,41 @@ router.post('/', authenticateToken, isAdmin, validateUserCreation, async (req, r
           email: user.email,
           role: user.role,
           managerId: user.manager_id,
+          isVerified: user.is_verified,
+          isManagerApprover: user.is_manager_approver,
           createdAt: user.created_at
         }
       }
     });
   } catch (error) {
     console.error('User creation error:', error);
+    
+    // Handle specific database errors
+    if (error.code === '23505') { // Unique constraint violation
+      return res.status(409).json({
+        success: false,
+        message: 'User with this email already exists'
+      });
+    }
+    
+    if (error.code === '23503') { // Foreign key constraint violation
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid company or manager reference'
+      });
+    }
+    
+    if (error.code === '23514') { // Check constraint violation
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid role specified'
+      });
+    }
+    
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -70,9 +98,23 @@ router.post('/', authenticateToken, isAdmin, validateUserCreation, async (req, r
 // @access  Private (Admin)
 router.get('/', authenticateToken, isAdmin, async (req, res) => {
   try {
+    console.log('🔍 Getting users for company:', req.user.company_id);
+    console.log('🔍 User role:', req.user.role);
+    console.log('🔍 Query params:', req.query);
+    
     const { role } = req.query;
     
+    // Validate company_id exists
+    if (!req.user.company_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not associated with any company'
+      });
+    }
+    
     const users = await User.getUsersByCompany(req.user.company_id, role);
+    
+    console.log('✅ Found users:', users.length);
 
     res.json({
       success: true,
@@ -83,6 +125,7 @@ router.get('/', authenticateToken, isAdmin, async (req, res) => {
           email: user.email,
           role: user.role,
           managerName: user.manager_name,
+          isManagerApprover: user.is_manager_approver,
           createdAt: user.created_at
         }))
       }
@@ -91,7 +134,8 @@ router.get('/', authenticateToken, isAdmin, async (req, res) => {
     console.error('Get users error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });

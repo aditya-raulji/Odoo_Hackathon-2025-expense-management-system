@@ -85,24 +85,29 @@ router.post('/', uploadSingle('receipt'), expenseValidation, async (req, res) =>
     const expense = await Expense.create(expenseData);
 
     // Apply approval rules
-    await applyApprovalRules(expense, companyId);
+    await Expense.applyApprovalRules(expense.id, companyId, {
+      amount: expense.converted_amount,
+      category: expense.category
+    });
 
-    // Get updated expense with approvers
-    const updatedExpense = await Expense.findById(expense.id);
+    // Get updated expense with approvals
+    const updatedExpense = await Expense.getExpenseWithApprovals(expense.id);
 
     // Notify first approver if exists
-    if (updatedExpense.approvers && updatedExpense.approvers.length > 0) {
-      const firstApprover = updatedExpense.approvers[0];
-      const approver = await User.findById(firstApprover.userId);
-      if (approver) {
-        await notificationService.notifyExpenseSubmitted(updatedExpense, approver);
-        await notificationService.createInAppNotification(
-          approver.id,
-          'New Expense for Approval',
-          `New expense submitted by ${req.user.name} requires your approval`,
-          'info',
-          `/dashboard/approvals`
-        );
+    if (updatedExpense.approvals && updatedExpense.approvals.length > 0) {
+      const firstApprover = updatedExpense.approvals.find(a => a.status === 'pending');
+      if (firstApprover) {
+        const approver = await User.findById(firstApprover.approver_id);
+        if (approver) {
+          await notificationService.notifyExpenseSubmitted(updatedExpense, approver);
+          await notificationService.createInAppNotification(
+            approver.id,
+            'New Expense for Approval',
+            `New expense submitted by ${req.user.name} requires your approval`,
+            'info',
+            `/dashboard/approvals`
+          );
+        }
       }
     }
 
@@ -119,7 +124,7 @@ router.post('/', uploadSingle('receipt'), expenseValidation, async (req, res) =>
           expenseDate: expense.expense_date,
           receiptUrl: expense.receipt_url,
           status: expense.status,
-          approvers: updatedExpense.approvers
+          approvals: updatedExpense.approvals || []
         }
       },
       message: 'Expense submitted successfully'
@@ -145,7 +150,7 @@ router.get('/my', async (req, res) => {
     if (dateFrom) filters.dateFrom = dateFrom;
     if (dateTo) filters.dateTo = dateTo;
 
-    const expenses = await Expense.findByUser(req.user.id, filters);
+    const expenses = await Expense.getUserExpensesWithTimeline(req.user.id, filters);
 
     res.json({
       success: true,
@@ -160,12 +165,7 @@ router.get('/my', async (req, res) => {
           expenseDate: expense.expense_date,
           receiptUrl: expense.receipt_url,
           createdAt: expense.created_at,
-          approvers: expense.approvers ? expense.approvers.map(approver => ({
-            name: approver.name || 'Unknown',
-            approved: approver.approved,
-            comments: approver.comments,
-            approvedAt: approver.approved_at
-          })) : []
+          approvalTimeline: expense.approval_timeline || []
         }))
       }
     });
@@ -182,15 +182,10 @@ router.get('/my', async (req, res) => {
 // GET /api/expenses/pending - Get pending expenses for approval
 router.get('/pending', isManagerOrAdmin, async (req, res) => {
   try {
-    const { teamOnly } = req.query;
     const companyId = req.user.company_id;
     const approverId = req.user.id;
 
-    const expenses = await Expense.findPendingForApproval(
-      approverId,
-      companyId,
-      teamOnly === 'true'
-    );
+    const expenses = await Expense.getPendingApprovals(approverId, companyId);
 
     res.json({
       success: true,
@@ -208,7 +203,10 @@ router.get('/pending', isManagerOrAdmin, async (req, res) => {
           expenseDate: expense.expense_date,
           receiptUrl: expense.receipt_url,
           createdAt: expense.created_at,
-          approvers: expense.approvers || []
+          approvalStatus: expense.approval_status,
+          approvalComments: expense.approval_comments,
+          approvedAt: expense.approved_at,
+          sequenceOrder: expense.sequence_order
         }))
       }
     });
@@ -274,11 +272,8 @@ router.put('/:id/approve', [
     const submitter = await User.findById(expense.submitted_by);
 
     if (approved) {
-      // Check if all approvers have approved or if threshold is met
-      const finalStatus = await checkFinalApprovalStatus(expense, updatedExpense);
-      
-      if (finalStatus === 'approved') {
-        await Expense.updateStatus(id, 'approved');
+      if (updatedExpense.status === 'approved') {
+        // Fully approved
         await notificationService.notifyExpenseApproved(expense, submitter);
         await notificationService.createInAppNotification(
           submitter.id,
@@ -287,9 +282,9 @@ router.put('/:id/approve', [
           'success',
           `/dashboard/expenses`
         );
-      } else if (finalStatus === 'next_approver') {
-        // Notify next approver
-        const nextApprover = await getNextApprover(expense, updatedExpense);
+      } else if (updatedExpense.status === 'in_progress') {
+        // Forwarded to next approver
+        const nextApprover = await User.findById(updatedExpense.currentApproverId);
         if (nextApprover) {
           await notificationService.notifyNextApprover(expense, nextApprover);
           await notificationService.createInAppNotification(
@@ -300,10 +295,18 @@ router.put('/:id/approve', [
             `/dashboard/approvals`
           );
         }
+        
+        // Notify submitter about progress
+        await notificationService.createInAppNotification(
+          submitter.id,
+          'Expense Progress',
+          `Your expense for ${expense.category} has been approved and forwarded`,
+          'info',
+          `/dashboard/expenses`
+        );
       }
     } else {
       // Expense rejected
-      await Expense.updateStatus(id, 'rejected');
       await notificationService.notifyExpenseRejected(expense, submitter, comments);
       await notificationService.createInAppNotification(
         submitter.id,
@@ -320,7 +323,7 @@ router.put('/:id/approve', [
         expense: {
           id: updatedExpense.id,
           status: updatedExpense.status,
-          approvers: updatedExpense.approvers
+          currentApproverId: updatedExpense.currentApproverId
         }
       },
       message: approved ? 'Expense approved and routed' : 'Expense rejected'
@@ -339,7 +342,7 @@ router.put('/:id/approve', [
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const expense = await Expense.findById(id);
+    const expense = await Expense.getExpenseWithApprovals(id);
 
     if (!expense) {
       return res.status(404).json({
@@ -375,7 +378,7 @@ router.get('/:id', async (req, res) => {
           expenseDate: expense.expense_date,
           receiptUrl: expense.receipt_url,
           status: expense.status,
-          approvers: expense.approvers || [],
+          approvals: expense.approvals || [],
           createdAt: expense.created_at,
           updatedAt: expense.updated_at
         }
@@ -391,53 +394,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Helper function to apply approval rules
-async function applyApprovalRules(expense, companyId) {
-  try {
-    // Find applicable rules
-    const rules = await ApprovalRule.findApplicableRules(companyId, {
-      amount: expense.converted_amount,
-      category: expense.category
-    });
-
-    if (rules.length === 0) {
-      // No rules found, use default manager approval
-      const managerApprovers = await User.getManagerApproversByCompany(companyId);
-      if (managerApprovers.length > 0) {
-        await Expense.addApprover(expense.id, {
-          userId: managerApprovers[0].id,
-          order: 1
-        });
-      }
-      return;
-    }
-
-    // Apply the most specific rule (highest min_amount)
-    const rule = rules[0];
-    
-    if (rule.required_approvers && rule.required_approvers.length > 0) {
-      // Add specific approvers
-      for (let i = 0; i < rule.required_approvers.length; i++) {
-        await Expense.addApprover(expense.id, {
-          userId: rule.required_approvers[i],
-          order: i + 1
-        });
-      }
-    } else if (rule.threshold) {
-      // Threshold-based approval - add manager approvers
-      const managerApprovers = await User.getManagerApproversByCompany(companyId);
-      for (let i = 0; i < managerApprovers.length; i++) {
-        await Expense.addApprover(expense.id, {
-          userId: managerApprovers[i].id,
-          order: i + 1
-        });
-      }
-    }
-  } catch (error) {
-    console.error('Error applying approval rules:', error);
-  }
-}
-
 // Helper function to check approval authorization
 async function checkApprovalAuthorization(expense, approverId, userRole) {
   if (userRole === 'admin') {
@@ -445,45 +401,13 @@ async function checkApprovalAuthorization(expense, approverId, userRole) {
   }
 
   // Check if user is in the approvers list
-  if (expense.approvers && expense.approvers.length > 0) {
-    return expense.approvers.some(approver => 
-      approver.userId === approverId && !approver.approved
+  if (expense.approvals && expense.approvals.length > 0) {
+    return expense.approvals.some(approver => 
+      approver.approver_id === approverId && approver.status === 'pending'
     );
   }
 
   return false;
-}
-
-// Helper function to check final approval status
-async function checkFinalApprovalStatus(originalExpense, updatedExpense) {
-  const approvers = updatedExpense.approvers || [];
-  const approvedCount = approvers.filter(a => a.approved).length;
-  const totalApprovers = approvers.length;
-
-  if (approvedCount === totalApprovers) {
-    return 'approved';
-  }
-
-  // Check if we need to add next approver (sequential approval)
-  const currentApproverIndex = approvers.findIndex(a => a.userId === updatedExpense.approvers[updatedExpense.approvers.length - 1].userId);
-  if (currentApproverIndex < totalApprovers - 1) {
-    return 'next_approver';
-  }
-
-  return 'pending';
-}
-
-// Helper function to get next approver
-async function getNextApprover(originalExpense, updatedExpense) {
-  const approvers = updatedExpense.approvers || [];
-  const currentApproverIndex = approvers.findIndex(a => a.userId === updatedExpense.approvers[updatedExpense.approvers.length - 1].userId);
-  
-  if (currentApproverIndex < approvers.length - 1) {
-    const nextApproverId = approvers[currentApproverIndex + 1].userId;
-    return await User.findById(nextApproverId);
-  }
-
-  return null;
 }
 
 module.exports = router;
