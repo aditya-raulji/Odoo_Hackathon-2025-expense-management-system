@@ -154,48 +154,101 @@ export default function AuthPage() {
 
   return (
     <div 
-      className="min-h-screen bg-zinc-900 relative overflow-hidden"
+      className="min-h-screen bg-white relative overflow-hidden"
       onClick={handleOutsideClick}
     >
-      {/* Background decorative circles */}
+      {/* Enhanced Background with Stunning Visual Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-blue-50"></div>
+      
+      {/* Large Background Circles - Left Side */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2">
-        <div className="w-96 h-96 rounded-full border-[60px] border-zinc-800"></div>
-      </div>
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2">
-        <div className="w-96 h-96 rounded-full border-[60px] border-zinc-800"></div>
+        {/* Outer Circle */}
+        <div className="w-[500px] h-[500px] rounded-full border-[70px] border-gray-200/60 animate-pulse"></div>
+        {/* Middle Circle */}
+        <div className="absolute top-12 left-12 w-[360px] h-[360px] rounded-full border-[50px] border-blue-200/40 animate-ping"></div>
+        {/* Inner Circle */}
+        <div className="absolute top-24 left-24 w-[220px] h-[220px] rounded-full border-[30px] border-blue-300/30 animate-pulse"></div>
+        {/* Small Inner Circle */}
+        <div className="absolute top-36 left-36 w-[80px] h-[80px] rounded-full border-[15px] border-blue-400/20 animate-bounce"></div>
       </div>
 
-      {/* Background text */}
-      <div className="absolute inset-0 flex items-center justify-center text-[20rem] font-bold text-zinc-800 select-none">
-        {isLogin ? 'LOG IN' : 'CREATE'}
+      {/* Large Background Circles - Right Side */}
+      <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2">
+        {/* Outer Circle */}
+        <div className="w-[500px] h-[500px] rounded-full border-[70px] border-gray-200/60 animate-pulse"></div>
+        {/* Middle Circle */}
+        <div className="absolute top-12 left-12 w-[360px] h-[360px] rounded-full border-[50px] border-purple-200/40 animate-ping"></div>
+        {/* Inner Circle */}
+        <div className="absolute top-24 left-24 w-[220px] h-[220px] rounded-full border-[30px] border-purple-300/30 animate-pulse"></div>
+        {/* Small Inner Circle */}
+        <div className="absolute top-36 left-36 w-[80px] h-[80px] rounded-full border-[15px] border-purple-400/20 animate-bounce"></div>
       </div>
+
+      {/* Additional Decorative Circles */}
+      <div className="absolute top-20 left-1/4 w-32 h-32 rounded-full border-[20px] border-blue-100/50 animate-pulse"></div>
+      <div className="absolute bottom-20 right-1/4 w-40 h-40 rounded-full border-[25px] border-purple-100/50 animate-pulse"></div>
+      <div className="absolute top-1/3 right-1/3 w-24 h-24 rounded-full border-[15px] border-green-100/40 animate-ping"></div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(25)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${2 + Math.random() * 6}s`,
+              opacity: 0.3 + Math.random() * 0.4,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Enhanced Background Text */}
+      <div className="absolute inset-0 flex items-center justify-center text-[20rem] font-bold text-gray-200/30 select-none">
+        <span className="animate-pulse bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          {isLogin ? 'LOG IN' : 'CREATE'}
+        </span>
+      </div>
+
+      {/* Multiple Gradient Overlays for Depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-white/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 via-transparent to-purple-50/20"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/10 to-transparent"></div>
+
+      {/* Floating Geometric Shapes */}
+      <div className="absolute top-1/4 left-1/4 w-16 h-16 border-2 border-blue-300/30 rotate-45 animate-spin" style={{ animationDuration: '20s' }}></div>
+      <div className="absolute bottom-1/4 right-1/4 w-12 h-12 border-2 border-purple-300/30 rotate-12 animate-spin" style={{ animationDuration: '15s' }}></div>
+      <div className="absolute top-1/2 left-1/6 w-8 h-8 border-2 border-green-300/30 rotate-45 animate-spin" style={{ animationDuration: '25s' }}></div>
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-8 py-6">
         <div className="flex items-center gap-8">
           <button 
             onClick={() => router.push('/')}
-            className="text-2xl font-bold text-white hover:text-zinc-300"
+            className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
           >
             ExMan.
           </button>
-          <nav className="flex items-center gap-6 text-sm text-zinc-400">
-            <button className="hover:text-white">Dashboard</button>
-            <button className="hover:text-white">Expenses</button>
-            <button className="hover:text-white">Reports</button>
-            <button className="hover:text-white">Settings</button>
+          <nav className="flex items-center gap-6 text-sm text-gray-600">
+            <button className="hover:text-gray-900 transition-colors">Dashboard</button>
+            <button className="hover:text-gray-900 transition-colors">Expenses</button>
+            <button className="hover:text-gray-900 transition-colors">Reports</button>
+            <button className="hover:text-gray-900 transition-colors">Settings</button>
           </nav>
         </div>
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setIsLogin(true)}
-            className="text-sm text-zinc-400 hover:text-white"
+            className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
             Log in
           </button>
           <button 
             onClick={() => setIsLogin(false)}
-            className="text-sm text-zinc-400 hover:text-white"
+            className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
             Sign Up
           </button>
@@ -206,18 +259,18 @@ export default function AuthPage() {
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div 
           ref={modalRef}
-          className={`bg-white rounded-lg shadow-2xl flex overflow-hidden max-w-5xl w-full max-h-[90vh] transition-all duration-300 ${
+          className={`bg-white rounded-lg shadow-2xl flex overflow-hidden max-w-5xl w-full max-h-[90vh] transition-all duration-300 border border-gray-200 ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
         >
           {/* Left Side */}
-          <div className="w-1/2 bg-gray-50 p-8 flex flex-col items-center justify-center relative overflow-y-auto">
+          <div className="w-1/2 bg-gradient-to-br from-blue-50 to-purple-50 p-8 flex flex-col items-center justify-center relative overflow-y-auto">
             <button 
               onClick={() => {
                 setIsVisible(false);
                 setTimeout(() => router.push('/'), 300);
               }}
-              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
+              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -227,9 +280,9 @@ export default function AuthPage() {
             <h2 className="text-2xl font-normal text-gray-800 mb-16">Welcome!</h2>
             
             <div className="flex items-center gap-4 mb-16">
-              <div className="text-7xl font-bold text-black">ExMan</div>
+              <div className="text-7xl font-bold text-gray-900">ExMan</div>
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-300 to-emerald-200 flex items-center justify-center">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center shadow-lg">
                   <div className="w-20 h-20 rounded-full bg-white border-4 border-blue-600 flex items-center justify-center">
                     <div className="text-4xl">💰</div>
                   </div>
@@ -239,9 +292,9 @@ export default function AuthPage() {
 
             <p className="text-sm text-gray-600">
               {isLogin ? (
-                <>Not a member yet? <button onClick={() => setIsLogin(false)} className="text-black font-medium underline hover:no-underline">Register now</button></>
+                <>Not a member yet? <button onClick={() => setIsLogin(false)} className="text-blue-600 font-medium underline hover:no-underline transition-colors">Register now</button></>
               ) : (
-                <>Are you a member? <button onClick={() => setIsLogin(true)} className="text-black font-medium underline hover:no-underline">Log in now</button></>
+                <>Are you a member? <button onClick={() => setIsLogin(true)} className="text-blue-600 font-medium underline hover:no-underline transition-colors">Log in now</button></>
               )}
             </p>
           </div>
@@ -330,7 +383,7 @@ export default function AuthPage() {
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   {loading ? 'Logging in...' : 'Log in now'}
                 </button>
@@ -512,7 +565,7 @@ export default function AuthPage() {
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   {loading ? 'Creating Account...' : 'Create Admin Account'}
                 </button>
