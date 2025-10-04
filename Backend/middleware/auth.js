@@ -107,7 +107,7 @@ const generateToken = (userId, role, companyId) => {
   return jwt.sign(
     { userId, role, companyId }, 
     process.env.JWT_SECRET, 
-    { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+    { expiresIn: process.env.JWT_EXPIRES_IN || '1h' } // 1 hour session
   );
 };
 
