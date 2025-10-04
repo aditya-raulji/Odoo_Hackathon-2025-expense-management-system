@@ -259,7 +259,7 @@ const ExpenseForm = ({ onExpenseSubmitted, categories = [] }) => {
               type="number"
               step="0.01"
               {...register('amount', { required: 'Amount is required' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="0.00"
             />
             {errors.amount && (
@@ -274,7 +274,7 @@ const ExpenseForm = ({ onExpenseSubmitted, categories = [] }) => {
             </label>
             <select
               {...register('currency', { required: 'Currency is required' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             >
               <option value="USD">USD - US Dollar</option>
               <option value="EUR">EUR - Euro</option>
@@ -297,7 +297,7 @@ const ExpenseForm = ({ onExpenseSubmitted, categories = [] }) => {
             </label>
             <select
               {...register('category', { required: 'Category is required' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             >
               <option value="">Select a category</option>
               {categories.map((category) => (
@@ -320,7 +320,7 @@ const ExpenseForm = ({ onExpenseSubmitted, categories = [] }) => {
             <input
               type="date"
               {...register('expenseDate', { required: 'Expense date is required' })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
             {errors.expenseDate && (
               <p className="mt-1 text-sm text-red-600">{errors.expenseDate.message}</p>
