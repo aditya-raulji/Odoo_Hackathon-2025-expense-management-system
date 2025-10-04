@@ -235,6 +235,53 @@ router.get('/profile', authenticateToken, async (req, res) => {
   }
 });
 
+// @route   GET /api/auth/debug
+// @desc    Debug endpoint to check authentication status
+// @access  Private
+router.get('/debug', authenticateToken, async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      message: 'Authentication successful',
+      data: {
+        user: req.user,
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Debug auth error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   GET /api/auth/debug-server
+// @desc    Debug endpoint to check server configuration
+// @access  Public
+router.get('/debug-server', async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      message: 'Server debug info',
+      data: {
+        jwtSecret: process.env.JWT_SECRET ? 'Configured' : 'Not configured',
+        jwtExpiresIn: process.env.JWT_EXPIRES_IN || 'Not set',
+        nodeEnv: process.env.NODE_ENV || 'Not set',
+        port: process.env.PORT || 'Not set',
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Debug server error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
 // @route   POST /api/auth/verify-email
 // @desc    Verify user email with 6-digit code
 // @access  Public

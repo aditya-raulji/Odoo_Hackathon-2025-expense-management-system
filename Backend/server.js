@@ -7,6 +7,8 @@ require('dotenv').config();
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const expenseRoutes = require('./routes/expenses');
+const rulesRoutes = require('./routes/rules');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -35,6 +37,9 @@ app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Static file serving for uploads
+app.use('/uploads', express.static('uploads'));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
@@ -47,6 +52,8 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/rules', rulesRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {

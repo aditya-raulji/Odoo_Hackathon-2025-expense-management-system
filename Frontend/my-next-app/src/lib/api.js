@@ -6,6 +6,19 @@ const handleResponse = async (response) => {
   const data = await response.json();
   
   if (!response.ok) {
+    // Log the error for debugging
+    console.error('API Error:', {
+      status: response.status,
+      statusText: response.statusText,
+      message: data.message,
+      url: response.url
+    });
+    
+    // For 401/403 errors, don't throw error immediately - let components handle it
+    if (response.status === 401 || response.status === 403) {
+      console.warn('Authentication error - token may be invalid');
+    }
+    
     throw new Error(data.message || 'Something went wrong');
   }
   
@@ -14,11 +27,31 @@ const handleResponse = async (response) => {
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('authToken');
-  return {
-    'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` })
+  const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  const headers = {
+    'Content-Type': 'application/json'
   };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+    console.log('Auth header set with token:', token.substring(0, 20) + '...');
+  } else {
+    console.warn('No auth token found in localStorage');
+  }
+  
+  return headers;
+};
+
+// Helper function to get auth headers for file uploads
+const getAuthHeadersForUpload = () => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  const headers = {};
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  return headers;
 };
 
 // Authentication API
@@ -99,6 +132,15 @@ export const authAPI = {
   // Get current user profile
   getCurrentUser: async () => {
     const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Debug authentication status
+  debugAuth: async () => {
+    const response = await fetch(`${API_BASE_URL}/auth/debug`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -285,6 +327,23 @@ export const expenseAPI = {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(expenseData),
+  submitExpense: async (expenseData, receiptFile = null) => {
+    const formData = new FormData();
+    
+    // Add expense data
+    Object.keys(expenseData).forEach(key => {
+      formData.append(key, expenseData[key]);
+    });
+    
+    // Add receipt file if provided
+    if (receiptFile) {
+      formData.append('receipt', receiptFile);
+    }
+
+    const response = await fetch(`${API_BASE_URL}/expenses`, {
+      method: 'POST',
+      headers: getAuthHeadersForUpload(),
+      body: formData,
     });
     return handleResponse(response);
   },
@@ -293,6 +352,15 @@ export const expenseAPI = {
   getExpenses: async (status = null) => {
     const params = status ? `?status=${status}` : '';
     const response = await fetch(`${API_BASE_URL}/expenses${params}`, {
+  getMyExpenses: async (filters = {}) => {
+    const params = new URLSearchParams();
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        params.append(key, filters[key]);
+      }
+    });
+    
+    const response = await fetch(`${API_BASE_URL}/expenses/my?${params}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -302,6 +370,10 @@ export const expenseAPI = {
   // Get specific expense
   getExpenseById: async (expenseId) => {
     const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+  // Get pending expenses for approval
+  getPendingExpenses: async (teamOnly = false) => {
+    const params = teamOnly ? '?teamOnly=true' : '';
+    const response = await fetch(`${API_BASE_URL}/expenses/pending${params}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -314,6 +386,12 @@ export const expenseAPI = {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(expenseData),
+  // Approve/reject expense
+  approveExpense: async (expenseId, approved, comments = '') => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/approve`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ approved, comments }),
     });
     return handleResponse(response);
   },
@@ -321,6 +399,60 @@ export const expenseAPI = {
   // Delete expense (if draft)
   deleteExpense: async (expenseId) => {
     const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+  // Get expense details
+  getExpenseDetails: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+};
+
+// Approval Rules API (Admin only)
+export const rulesAPI = {
+  // Create new approval rule
+  createRule: async (ruleData) => {
+    const response = await fetch(`${API_BASE_URL}/rules`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(ruleData),
+    });
+    return handleResponse(response);
+  },
+
+  // Get all approval rules
+  getRules: async (activeOnly = false) => {
+    const params = activeOnly ? '?active=true' : '';
+    const response = await fetch(`${API_BASE_URL}/rules${params}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Get specific approval rule
+  getRule: async (ruleId) => {
+    const response = await fetch(`${API_BASE_URL}/rules/${ruleId}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Update approval rule
+  updateRule: async (ruleId, ruleData) => {
+    const response = await fetch(`${API_BASE_URL}/rules/${ruleId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(ruleData),
+    });
+    return handleResponse(response);
+  },
+
+  // Delete approval rule
+  deleteRule: async (ruleId) => {
+    const response = await fetch(`${API_BASE_URL}/rules/${ruleId}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     });
@@ -330,6 +462,9 @@ export const expenseAPI = {
   // Get pending approvals (for managers/admins)
   getPendingApprovals: async () => {
     const response = await fetch(`${API_BASE_URL}/expenses/approvals/pending`, {
+  // Get approval rules statistics
+  getRulesStats: async () => {
+    const response = await fetch(`${API_BASE_URL}/rules/stats`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -340,6 +475,10 @@ export const expenseAPI = {
   approveExpense: async (expenseId) => {
     const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/approve`, {
       method: 'POST',
+  // Get available approvers
+  getApprovers: async () => {
+    const response = await fetch(`${API_BASE_URL}/rules/approvers`, {
+      method: 'GET',
       headers: getAuthHeaders(),
     });
     return handleResponse(response);
@@ -351,6 +490,11 @@ export const expenseAPI = {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ rejectionReason }),
+  // Get available expense categories
+  getCategories: async () => {
+    const response = await fetch(`${API_BASE_URL}/rules/categories`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
     });
     return handleResponse(response);
   },
@@ -360,27 +504,40 @@ export const expenseAPI = {
 export const apiUtils = {
   // Set auth token
   setAuthToken: (token) => {
-    localStorage.setItem('authToken', token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('authToken', token);
+      console.log('Token saved to localStorage');
+    }
   },
 
   // Get auth token
   getAuthToken: () => {
-    return localStorage.getItem('authToken');
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('authToken');
+    }
+    return null;
   },
 
   // Remove auth token
   removeAuthToken: () => {
-    localStorage.removeItem('authToken');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+    }
   },
 
   // Check if user is authenticated
   isAuthenticated: () => {
-    return !!localStorage.getItem('authToken');
+    if (typeof window !== 'undefined') {
+      return !!localStorage.getItem('authToken');
+    }
+    return false;
   },
 
   // Logout user
   logout: () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/auth';
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+    }
+    // Don't automatically redirect - let the component handle it
   },
 };
