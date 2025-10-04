@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AutoFix from "@/components/AutoFix";
-import OneClickFix from "@/components/OneClickFix";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +26,6 @@ export default function RootLayout({ children }) {
       >
         <AuthProvider>
           <AutoFix />
-          <OneClickFix />
           {children}
         </AuthProvider>
       </body>
