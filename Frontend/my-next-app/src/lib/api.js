@@ -277,6 +277,85 @@ export const notificationAPI = {
   },
 };
 
+// Expenses API
+export const expenseAPI = {
+  // Submit new expense
+  submitExpense: async (expenseData) => {
+    const response = await fetch(`${API_BASE_URL}/expenses`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(expenseData),
+    });
+    return handleResponse(response);
+  },
+
+  // Get user's expenses
+  getExpenses: async (status = null) => {
+    const params = status ? `?status=${status}` : '';
+    const response = await fetch(`${API_BASE_URL}/expenses${params}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Get specific expense
+  getExpenseById: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Update expense
+  updateExpense: async (expenseId, expenseData) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(expenseData),
+    });
+    return handleResponse(response);
+  },
+
+  // Delete expense (if draft)
+  deleteExpense: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Get pending approvals (for managers/admins)
+  getPendingApprovals: async () => {
+    const response = await fetch(`${API_BASE_URL}/expenses/approvals/pending`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Approve expense
+  approveExpense: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/approve`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Reject expense
+  rejectExpense: async (expenseId, rejectionReason) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/reject`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ rejectionReason }),
+    });
+    return handleResponse(response);
+  },
+};
+
 // Utility functions
 export const apiUtils = {
   // Set auth token
