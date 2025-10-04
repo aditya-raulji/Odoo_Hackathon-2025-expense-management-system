@@ -3,13 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import Navigation from '@/components/Navigation';
 import { userAPI } from '@/lib/api';
+import RulesManager from '@/components/RulesManager';
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateUser, setShowCreateUser] = useState(false);
+  const [activeTab, setActiveTab] = useState('users');
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
@@ -24,10 +27,17 @@ export default function AdminDashboard() {
   const { user, company, logout } = useAuth();
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (!user) {
+      // Still loading auth state
+      return;
+    }
+    
+    if (user.role !== 'admin') {
       router.push('/auth');
       return;
     }
+    
+    // User is authenticated and is admin, fetch data
     fetchUsers();
     fetchManagers();
   }, [user, router]);
@@ -109,26 +119,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600">{company?.name}</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">Welcome, {user?.name}</span>
-              <button
-                onClick={logout}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error/Success Messages */}
@@ -169,18 +160,49 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="bg-white p-6 rounded-lg shadow mb-8">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">User Management</h2>
-            <button
-              onClick={() => setShowCreateUser(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Create New User
-            </button>
+        {/* Tab Navigation */}
+        <div className="bg-white rounded-lg shadow-sm border mb-8">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8 px-6">
+              <button
+                onClick={() => setActiveTab('users')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'users'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                User Management
+              </button>
+              <button
+                onClick={() => setActiveTab('rules')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'rules'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Approval Rules
+              </button>
+            </nav>
           </div>
         </div>
+
+        {/* Tab Content */}
+        {activeTab === 'users' && (
+          <>
+            {/* Actions */}
+            <div className="bg-white p-6 rounded-lg shadow mb-8">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-gray-900">User Management</h2>
+                <button
+                  onClick={() => setShowCreateUser(true)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Create New User
+                </button>
+              </div>
+            </div>
 
         {/* Create User Modal */}
         {showCreateUser && (
@@ -271,68 +293,74 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Users Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Manager
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                      user.role === 'manager' ? 'bg-green-100 text-green-800' :
-                      'bg-blue-100 text-blue-800'
-                    }`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.managerName || '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => handleDeleteUser(user.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            {/* Users Table */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Role
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Manager
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Created
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {user.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {user.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                          user.role === 'manager' ? 'bg-green-100 text-green-800' :
+                          'bg-blue-100 text-blue-800'
+                        }`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {user.managerName || '-'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => handleDeleteUser(user.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'rules' && (
+          <RulesManager />
+        )}
       </div>
     </div>
   );

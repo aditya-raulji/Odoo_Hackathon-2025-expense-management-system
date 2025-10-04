@@ -26,7 +26,8 @@ class User {
 
   static async findById(id) {
     const query = `
-      SELECT u.id, u.name, u.email, u.role, u.company_id, u.manager_id, u.is_verified, u.created_at,
+      SELECT u.id, u.name, u.email, u.role, u.company_id, u.manager_id, u.is_verified, 
+             u.is_manager_approver, u.created_at,
              c.name as company_name, c.currency, c.country,
              m.name as manager_name
       FROM users u
@@ -112,7 +113,7 @@ class User {
 
   static async getUsersByCompany(companyId, role = null) {
     let query = `
-      SELECT u.id, u.name, u.email, u.role, u.created_at,
+      SELECT u.id, u.name, u.email, u.role, u.is_manager_approver, u.created_at,
              m.name as manager_name
       FROM users u
       LEFT JOIN users m ON u.manager_id = m.id
@@ -136,6 +137,17 @@ class User {
       SELECT id, name, email
       FROM users
       WHERE company_id = $1 AND role = 'manager'
+      ORDER BY name
+    `;
+    const result = await pool.query(query, [companyId]);
+    return result.rows;
+  }
+
+  static async getManagerApproversByCompany(companyId) {
+    const query = `
+      SELECT id, name, email, role
+      FROM users
+      WHERE company_id = $1 AND is_manager_approver = true
       ORDER BY name
     `;
     const result = await pool.query(query, [companyId]);

@@ -17,7 +17,8 @@ ALTER TABLE users
 ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'employee' CHECK (role IN ('admin', 'manager', 'employee')),
 ADD COLUMN IF NOT EXISTS company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
 ADD COLUMN IF NOT EXISTS manager_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-ADD COLUMN IF NOT EXISTS verification_code VARCHAR(6);
+ADD COLUMN IF NOT EXISTS verification_code VARCHAR(6),
+ADD COLUMN IF NOT EXISTS is_manager_approver BOOLEAN DEFAULT FALSE;
 
 -- Create user_profiles table for extended user information
 CREATE TABLE IF NOT EXISTS user_profiles (
@@ -133,3 +134,63 @@ SELECT id, FALSE, FALSE, FALSE, TRUE
 FROM users
 WHERE id NOT IN (SELECT user_id FROM user_subscriptions)
 ON CONFLICT DO NOTHING;
+
+-- Create expenses table for expense management
+CREATE TABLE IF NOT EXISTS expenses (
+    id SERIAL PRIMARY KEY,
+    submitted_by INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
+    amount DECIMAL(15,2) NOT NULL,
+    converted_amount DECIMAL(15,2) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    expense_date DATE NOT NULL,
+    receipt_url VARCHAR(500),
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+    approvers JSONB DEFAULT '[]'::jsonb, -- Array of {userId, order, approved, comments, approvedAt}
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create approval_rules table for configurable approval workflows
+CREATE TABLE IF NOT EXISTS approval_rules (
+    id SERIAL PRIMARY KEY,
+    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    threshold INTEGER DEFAULT NULL CHECK (threshold >= 0 AND threshold <= 100), -- Percentage threshold
+    required_approvers INTEGER[] DEFAULT NULL, -- Array of user IDs
+    is_sequential BOOLEAN DEFAULT TRUE,
+    min_amount DECIMAL(15,2) DEFAULT NULL,
+    max_amount DECIMAL(15,2) DEFAULT NULL,
+    category_filters VARCHAR(50)[] DEFAULT NULL, -- Array of categories
+    is_active BOOLEAN DEFAULT TRUE,
+    created_by INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes for expenses table
+CREATE INDEX IF NOT EXISTS idx_expenses_submitted_by ON expenses(submitted_by);
+CREATE INDEX IF NOT EXISTS idx_expenses_company_id ON expenses(company_id);
+CREATE INDEX IF NOT EXISTS idx_expenses_status ON expenses(status);
+CREATE INDEX IF NOT EXISTS idx_expenses_category ON expenses(category);
+CREATE INDEX IF NOT EXISTS idx_expenses_date ON expenses(expense_date);
+CREATE INDEX IF NOT EXISTS idx_expenses_created_at ON expenses(created_at);
+
+-- Create indexes for approval_rules table
+CREATE INDEX IF NOT EXISTS idx_approval_rules_company_id ON approval_rules(company_id);
+CREATE INDEX IF NOT EXISTS idx_approval_rules_active ON approval_rules(is_active);
+CREATE INDEX IF NOT EXISTS idx_approval_rules_min_amount ON approval_rules(min_amount);
+CREATE INDEX IF NOT EXISTS idx_approval_rules_max_amount ON approval_rules(max_amount);
+
+-- Create triggers for updated_at timestamps
+CREATE TRIGGER update_expenses_updated_at 
+    BEFORE UPDATE ON expenses 
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_approval_rules_updated_at 
+    BEFORE UPDATE ON approval_rules 
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
