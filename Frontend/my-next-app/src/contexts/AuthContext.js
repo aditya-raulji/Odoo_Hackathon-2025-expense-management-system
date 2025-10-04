@@ -24,6 +24,18 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
+  // Auto refresh token every 50 minutes (before 1 hour expiry)
+  useEffect(() => {
+    if (isAuthenticated) {
+      const interval = setInterval(async () => {
+        console.log('Auto-refreshing token...');
+        await refreshToken();
+      }, 50 * 60 * 1000); // 50 minutes
+
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
   const checkAuthStatus = async () => {
     try {
       console.log('Checking auth status...');
@@ -37,10 +49,14 @@ export const AuthProvider = ({ children }) => {
           setCompany(response.data.company);
           setIsAuthenticated(true);
         } else {
-          console.log('User data fetch failed, clearing auth');
-          // If response is not successful, clear auth
-          apiUtils.removeAuthToken();
-          setIsAuthenticated(false);
+          console.log('User data fetch failed, trying token refresh...');
+          // Try to refresh token before clearing auth
+          const refreshResult = await refreshToken();
+          if (!refreshResult.success) {
+            console.log('Token refresh failed, clearing auth');
+            apiUtils.removeAuthToken();
+            setIsAuthenticated(false);
+          }
         }
       } else {
         console.log('No token found, user not authenticated');
@@ -48,8 +64,13 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      // Don't automatically clear token - let user manually logout
-      setIsAuthenticated(false);
+      // Try to refresh token before clearing auth
+      const refreshResult = await refreshToken();
+      if (!refreshResult.success) {
+        console.log('Token refresh failed, clearing auth');
+        apiUtils.removeAuthToken();
+        setIsAuthenticated(false);
+      }
     } finally {
       setLoading(false);
     }
@@ -157,11 +178,40 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  const logout = () => {
-    apiUtils.logout();
-    setUser(null);
-    setCompany(null);
-    setIsAuthenticated(false);
+  const refreshToken = async () => {
+    try {
+      console.log('Refreshing token...');
+      const response = await authAPI.refreshToken();
+      if (response.success) {
+        console.log('Token refreshed successfully');
+        apiUtils.setAuthToken(response.data.token);
+        setUser(response.data.user);
+        setCompany(response.data.company);
+        setIsAuthenticated(true);
+        return { success: true };
+      } else {
+        console.log('Token refresh failed:', response.message);
+        return { success: false, message: response.message };
+      }
+    } catch (error) {
+      console.error('Token refresh error:', error);
+      return { success: false, message: error.message };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Call logout API to invalidate token on server
+      await authAPI.logout();
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      // Clear local storage and state regardless of API call
+      apiUtils.logout();
+      setUser(null);
+      setCompany(null);
+      setIsAuthenticated(false);
+    }
   };
 
   const updateUser = (userData) => {
@@ -182,6 +232,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateUser,
     checkAuthStatus,
+    refreshToken,
   };
 
   return (

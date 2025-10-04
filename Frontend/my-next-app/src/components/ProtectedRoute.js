@@ -20,9 +20,9 @@ export default function ProtectedRoute({ children, requiredRole = null }) {
         if (user?.role === 'admin') {
           router.push('/dashboard/admin');
         } else if (user?.role === 'manager') {
-          router.push('/dashboard/approvals');
+          router.push('/dashboard/manager');
         } else if (user?.role === 'employee') {
-          router.push('/dashboard/expenses');
+          router.push('/dashboard/employee');
         } else {
           router.push('/auth');
         }

@@ -80,9 +80,9 @@ export default function AuthPage() {
           if (result.user.role === 'admin') {
             router.push('/dashboard/admin');
           } else if (result.user.role === 'manager') {
-            router.push('/dashboard/approvals');
+            router.push('/dashboard/manager');
           } else {
-            router.push('/dashboard/expenses');
+            router.push('/dashboard/employee');
           }
         }, 1000);
       } else {
@@ -334,7 +334,7 @@ export default function AuthPage() {
                     placeholder="Enter your email"
                     value={loginData.email}
                     onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
@@ -347,7 +347,7 @@ export default function AuthPage() {
                       placeholder="Enter your password"
                       value={loginData.password}
                       onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                      className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                      className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                       required
                     />
                     <button
@@ -432,7 +432,7 @@ export default function AuthPage() {
                     placeholder="Enter your company name"
                     value={signupData.companyName}
                     onChange={(e) => setSignupData({...signupData, companyName: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
@@ -444,7 +444,7 @@ export default function AuthPage() {
                     placeholder="Enter your full name"
                     value={signupData.name}
                     onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
@@ -456,7 +456,7 @@ export default function AuthPage() {
                     placeholder="Enter your email address"
                     value={signupData.email}
                     onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
@@ -487,7 +487,7 @@ export default function AuthPage() {
                         placeholder="Enter password"
                         value={signupData.password}
                         onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                         required
                         minLength={8}
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
@@ -519,7 +519,7 @@ export default function AuthPage() {
                         placeholder="Confirm password"
                         value={signupData.confirmPassword}
                         onChange={(e) => setSignupData({...signupData, confirmPassword: e.target.value})}
-                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                         required
                         minLength={8}
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"

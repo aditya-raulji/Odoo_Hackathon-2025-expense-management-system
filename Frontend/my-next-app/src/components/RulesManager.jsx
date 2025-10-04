@@ -351,7 +351,7 @@ const RulesManager = () => {
                   <input
                     type="text"
                     {...register('name', { required: 'Rule name is required' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="e.g., High Value Expenses"
                   />
                   {errors.name && (
@@ -393,7 +393,7 @@ const RulesManager = () => {
                     </label>
                     <select
                       {...register('isSequential', { required: true })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     >
                       <option value="true">Sequential (one after another)</option>
                       <option value="false">Parallel (all at once)</option>
@@ -412,7 +412,7 @@ const RulesManager = () => {
                       min="0"
                       max="100"
                       {...register('threshold')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="e.g., 60"
                     />
                   </div>
@@ -427,7 +427,7 @@ const RulesManager = () => {
                     <input
                       type="text"
                       {...register('requiredApprovers')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="Enter user IDs separated by commas (e.g., 1, 2, 3)"
                     />
                     <p className="mt-1 text-sm text-gray-500">
@@ -446,7 +446,7 @@ const RulesManager = () => {
                       type="number"
                       step="0.01"
                       {...register('minAmount')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="0.00"
                     />
                   </div>
@@ -458,7 +458,7 @@ const RulesManager = () => {
                       type="number"
                       step="0.01"
                       {...register('maxAmount')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                       placeholder="No limit"
                     />
                   </div>
@@ -472,7 +472,7 @@ const RulesManager = () => {
                   <input
                     type="text"
                     {...register('categoryFilters')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                     placeholder="Enter categories separated by commas (e.g., Travel, Meals)"
                   />
                   <p className="mt-1 text-sm text-gray-500">

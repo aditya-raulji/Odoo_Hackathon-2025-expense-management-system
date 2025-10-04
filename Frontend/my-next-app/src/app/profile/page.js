@@ -199,7 +199,7 @@ export default function ProfilePage() {
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="Enter your username"
                   required
                 />
@@ -211,7 +211,7 @@ export default function ProfilePage() {
                   name="website"
                   value={formData.website}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://yourwebsite.com"
                 />
               </div>
@@ -222,7 +222,7 @@ export default function ProfilePage() {
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="Enter your first name"
                 />
               </div>
@@ -233,7 +233,7 @@ export default function ProfilePage() {
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="Enter your last name"
                 />
               </div>
@@ -244,7 +244,7 @@ export default function ProfilePage() {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="Enter your location"
                 />
               </div>
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -293,7 +293,7 @@ export default function ProfilePage() {
                 onChange={handleInputChange}
                 rows={4}
                 maxLength={500}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                 placeholder="Tell us about yourself..."
               />
               <div className="text-sm text-gray-600 mt-2">
@@ -312,7 +312,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.social_links.twitter}
                   onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://twitter.com/username"
                 />
               </div>
@@ -322,7 +322,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.social_links.linkedin}
                   onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://linkedin.com/in/username"
                 />
               </div>
@@ -332,7 +332,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.social_links.github}
                   onChange={(e) => handleSocialLinkChange('github', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://github.com/username"
                 />
               </div>
@@ -342,7 +342,7 @@ export default function ProfilePage() {
                   type="url"
                   value={formData.social_links.instagram}
                   onChange={(e) => handleSocialLinkChange('instagram', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-900 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://instagram.com/username"
                 />
               </div>

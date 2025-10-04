@@ -249,7 +249,7 @@ export default function SubmitExpensePage() {
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.description ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Enter expense description"
@@ -269,7 +269,7 @@ export default function SubmitExpensePage() {
                   name="expenseDate"
                   value={formData.expenseDate}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.expenseDate ? 'border-red-300' : 'border-gray-300'
                   }`}
                 />
@@ -287,7 +287,7 @@ export default function SubmitExpensePage() {
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.category ? 'border-red-300' : 'border-gray-300'
                   }`}
                 >
@@ -334,9 +334,9 @@ export default function SubmitExpensePage() {
                     onChange={handleInputChange}
                     step="0.01"
                     min="0"
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.amount ? 'border-red-300' : 'border-gray-300'
-                    }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+                    errors.amount ? 'border-red-300' : 'border-gray-300'
+                  }`}
                     placeholder="0.00"
                   />
                   {errors.amount && (
@@ -351,7 +351,7 @@ export default function SubmitExpensePage() {
                     name="currency"
                     value={formData.currency}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   >
                     {currencies.map(currency => (
                       <option key={currency.code} value={currency.code}>
@@ -372,7 +372,7 @@ export default function SubmitExpensePage() {
                   value={formData.remarks}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="Additional notes or remarks"
                 />
               </div>

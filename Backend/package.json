@@ -7,6 +7,14 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "init-db": "node scripts/init-db.js",
+    "migrate-expense": "node scripts/migrate-expense-approval.js",
+    "test-expense": "node scripts/test-expense-flow.js",
+    "test-manager": "node scripts/test-manager-creation.js",
+    "test-manager-access": "node scripts/test-manager-access.js",
+    "debug-manager": "node scripts/debug-manager-creation.js",
+    "debug-users": "node scripts/debug-users-endpoint.js",
+    "fix-schema": "node scripts/fix-database-schema.js",
+    "add-manager": "node scripts/add-default-manager.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

@@ -26,13 +26,13 @@ const Navigation = () => {
     },
     {
       name: 'Expenses',
-      href: '/dashboard/expenses',
+      href: '/dashboard/employee',
       icon: FileText,
       roles: ['admin', 'employee']
     },
     {
       name: 'Approvals',
-      href: '/dashboard/approvals',
+      href: '/dashboard/manager',
       icon: CheckCircle,
       roles: ['admin', 'manager']
     },

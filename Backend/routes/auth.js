@@ -460,4 +460,56 @@ router.post('/reset-password', validatePasswordReset, async (req, res) => {
   }
 });
 
+// @route   POST /api/auth/refresh
+// @desc    Refresh JWT token
+// @access  Private
+router.post('/refresh', authenticateToken, async (req, res) => {
+  try {
+    // Generate new token with same user data
+    const newToken = generateToken(req.user.id, req.user.role, req.user.company_id);
+    
+    res.json({
+      success: true,
+      data: {
+        token: newToken,
+        user: {
+          id: req.user.id,
+          name: req.user.name,
+          email: req.user.email,
+          role: req.user.role,
+          companyId: req.user.company_id,
+          isVerified: req.user.is_verified
+        }
+      },
+      message: 'Token refreshed successfully'
+    });
+  } catch (error) {
+    console.error('Token refresh error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
+// @route   POST /api/auth/logout
+// @desc    Logout user (client-side token removal)
+// @access  Private
+router.post('/logout', authenticateToken, async (req, res) => {
+  try {
+    // In a stateless JWT system, logout is handled client-side
+    // by removing the token from storage
+    res.json({
+      success: true,
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+});
+
 module.exports = router;

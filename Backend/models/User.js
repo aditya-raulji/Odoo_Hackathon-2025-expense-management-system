@@ -4,16 +4,19 @@ const { v4: uuidv4 } = require('uuid');
 
 class User {
   static async create(userData) {
-    const { name, email, password, role = 'employee', companyId, managerId, verificationCode } = userData;
+    const { name, email, password, role = 'employee', companyId, managerId, verificationCode, isVerified = false, isManagerApprover = false } = userData;
     const hashedPassword = await bcrypt.hash(password, 12);
     
+    // Auto-set isManagerApprover for managers
+    const shouldBeManagerApprover = role === 'manager' || isManagerApprover;
+    
     const query = `
-      INSERT INTO users (name, email, password, role, company_id, manager_id, verification_code, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
-      RETURNING id, name, email, role, company_id, manager_id, is_verified, created_at
+      INSERT INTO users (name, email, password, role, company_id, manager_id, verification_code, is_verified, is_manager_approver, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+      RETURNING id, name, email, role, company_id, manager_id, is_verified, is_manager_approver, created_at
     `;
     
-    const values = [name, email, hashedPassword, role, companyId, managerId, verificationCode];
+    const values = [name, email, hashedPassword, role, companyId, managerId, verificationCode, isVerified, shouldBeManagerApprover];
     const result = await pool.query(query, values);
     return result.rows[0];
   }
