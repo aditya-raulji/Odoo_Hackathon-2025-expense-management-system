@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Navigation from '@/components/Navigation';
-import QuickFix from '@/components/QuickFix';
 import { 
   FileText, 
   CheckCircle, 
@@ -27,9 +26,9 @@ export default function Dashboard() {
 
     // Redirect based on role
     if (user.role === 'employee') {
-      router.push('/dashboard/expenses');
+      router.push('/dashboard/employee');
     } else if (user.role === 'manager') {
-      router.push('/dashboard/approvals');
+      router.push('/dashboard/manager');
     } else if (user.role === 'admin') {
       router.push('/dashboard/admin');
     }
@@ -75,19 +74,19 @@ export default function Dashboard() {
     switch (user.role) {
       case 'employee':
         return [
-          { name: 'Submit New Expense', href: '/dashboard/expenses', icon: FileText },
-          { name: 'View My Expenses', href: '/dashboard/expenses', icon: FileText }
+          { name: 'Submit New Expense', href: '/dashboard/employee', icon: FileText },
+          { name: 'View My Expenses', href: '/dashboard/employee', icon: FileText }
         ];
       case 'manager':
         return [
-          { name: 'Review Approvals', href: '/dashboard/approvals', icon: CheckCircle },
-          { name: 'View All Expenses', href: '/dashboard/approvals', icon: FileText }
+          { name: 'Review Approvals', href: '/dashboard/manager', icon: CheckCircle },
+          { name: 'View All Expenses', href: '/dashboard/manager', icon: FileText }
         ];
       case 'admin':
         return [
           { name: 'Manage Users', href: '/dashboard/admin', icon: Users },
           { name: 'Configure Rules', href: '/dashboard/rules', icon: Settings },
-          { name: 'View Approvals', href: '/dashboard/approvals', icon: CheckCircle }
+          { name: 'View Approvals', href: '/dashboard/manager', icon: CheckCircle }
         ];
       default:
         return [];
@@ -100,7 +99,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <QuickFix />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
