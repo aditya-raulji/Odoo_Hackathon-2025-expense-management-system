@@ -147,6 +147,24 @@ export const authAPI = {
     return handleResponse(response);
   },
 
+  // Refresh JWT token
+  refreshToken: async () => {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  // Logout user
+  logout: async () => {
+    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
 };
 
 // User Management API (Admin only)
