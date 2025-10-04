@@ -21,15 +21,6 @@ router.post('/signup', validateSignup, async (req, res) => {
   try {
     const { companyName, name, email, password, country } = req.body;
 
-    // Check if any company already exists
-    const companyCount = await Company.countCompanies();
-    if (companyCount > 0) {
-      return res.status(409).json({
-        success: false,
-        message: 'Company already exists. Contact Admin.'
-      });
-    }
-
     // Check if user already exists
     const existingUser = await User.findByEmail(email);
     if (existingUser) {

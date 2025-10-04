@@ -108,32 +108,34 @@ export default function EmployeeDashboard() {
               <h3 className="text-lg font-semibold mb-4">Submit New Expense</h3>
               <form onSubmit={handleCreateExpense} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount <span className="text-red-500">*</span></label>
                   <input
                     type="number"
                     step="0.01"
                     value={newExpense.amount}
                     onChange={(e) => setNewExpense({...newExpense, amount: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    placeholder="Enter amount"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description <span className="text-red-500">*</span></label>
                   <textarea
                     value={newExpense.description}
                     onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                     rows={3}
+                    placeholder="Enter expense description"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-500">*</span></label>
                   <select
                     value={newExpense.category}
                     onChange={(e) => setNewExpense({...newExpense, category: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   >
                     <option value="">Select Category</option>
@@ -145,12 +147,12 @@ export default function EmployeeDashboard() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Date <span className="text-red-500">*</span></label>
                   <input
                     type="date"
                     value={newExpense.date}
                     onChange={(e) => setNewExpense({...newExpense, date: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
@@ -158,14 +160,14 @@ export default function EmployeeDashboard() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                    className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                   >
                     {loading ? 'Submitting...' : 'Submit Expense'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowCreateExpense(false)}
-                    className="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400"
+                    className="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-400 transition-all duration-200 font-semibold text-base shadow-lg"
                   >
                     Cancel
                   </button>

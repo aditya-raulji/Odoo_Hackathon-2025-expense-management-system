@@ -133,13 +133,23 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error/Success Messages */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
-            {error}
+          <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm mb-6">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              {error}
+            </div>
           </div>
         )}
         {success && (
-          <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded mb-6">
-            {success}
+          <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm mb-6">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              {success}
+            </div>
           </div>
         )}
 
@@ -179,42 +189,45 @@ export default function AdminDashboard() {
               <h3 className="text-lg font-semibold mb-4">Create New User</h3>
               <form onSubmit={handleCreateUser} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
                   <input
                     type="text"
                     value={newUser.name}
                     onChange={(e) => setNewUser({...newUser, name: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    placeholder="Enter full name"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
                   <input
                     type="email"
                     value={newUser.email}
                     onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    placeholder="Enter email address"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Password <span className="text-red-500">*</span></label>
                   <input
                     type="password"
                     value={newUser.password}
                     onChange={(e) => setNewUser({...newUser, password: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                    placeholder="Enter password"
                     required
                     minLength={8}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Role <span className="text-red-500">*</span></label>
                   <select
                     value={newUser.role}
                     onChange={(e) => setNewUser({...newUser, role: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                   >
                     <option value="employee">Employee</option>
                     <option value="manager">Manager</option>
@@ -222,11 +235,11 @@ export default function AdminDashboard() {
                 </div>
                 {newUser.role === 'employee' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Manager</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Manager</label>
                     <select
                       value={newUser.managerId}
                       onChange={(e) => setNewUser({...newUser, managerId: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                     >
                       <option value="">Select Manager</option>
                       {managers.map(manager => (
@@ -241,14 +254,14 @@ export default function AdminDashboard() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                    className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                   >
                     {loading ? 'Creating...' : 'Create User'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowCreateUser(false)}
-                    className="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400"
+                    className="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-400 transition-all duration-200 font-semibold text-base shadow-lg"
                   >
                     Cancel
                   </button>

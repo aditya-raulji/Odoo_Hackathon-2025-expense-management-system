@@ -128,6 +128,7 @@ export default function AuthPage() {
         name: signupData.name,
         email: signupData.email,
         password: signupData.password,
+        confirmPassword: signupData.confirmPassword,
         country: signupData.country
       });
       
@@ -253,43 +254,53 @@ export default function AuthPage() {
               <form className="space-y-6" onSubmit={handleLogin}>
                 {/* Error/Success Messages */}
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded text-sm">
-                    {error}
+                  <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                      {error}
+                    </div>
                   </div>
                 )}
                 {success && (
-                  <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded text-sm">
-                    {success}
+                  <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      {success}
+                    </div>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                   <input 
                     type="email" 
-                    placeholder="Email"
+                    placeholder="Enter your email"
                     value={loginData.email}
                     onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                    className="w-full px-0 py-2 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Password</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                   <div className="relative">
                     <input 
                       type={showPassword ? "text" : "password"}
-                      placeholder="Password"
+                      placeholder="Enter your password"
                       value={loginData.password}
                       onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                      className="w-full px-0 py-2 pr-8 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                      className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-0 top-2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                     >
                       {showPassword ? (
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,21 +322,21 @@ export default function AuthPage() {
                     id="keepLogged"
                     checked={keepLoggedIn}
                     onChange={(e) => setKeepLoggedIn(e.target.checked)}
-                    className="w-4 h-4 border-gray-300 rounded"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
-                  <label htmlFor="keepLogged" className="ml-2 text-sm text-gray-600">Keep me logged in</label>
+                  <label htmlFor="keepLogged" className="ml-2 text-sm text-gray-700 font-medium">Keep me logged in</label>
                 </div>
 
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 >
                   {loading ? 'Logging in...' : 'Log in now'}
                 </button>
 
                 <div className="text-center">
-                  <button type="button" className="text-xs text-gray-600 hover:text-black underline">
+                  <button type="button" className="text-sm text-blue-600 hover:text-blue-800 font-medium underline transition-colors">
                     Forgot your password?
                   </button>
                 </div>
@@ -341,61 +352,71 @@ export default function AuthPage() {
               <form className="space-y-6" onSubmit={handleSignup}>
                 {/* Error/Success Messages */}
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded text-sm">
-                    {error}
+                  <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                      {error}
+                    </div>
                   </div>
                 )}
                 {success && (
-                  <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded text-sm">
-                    {success}
+                  <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      {success}
+                    </div>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Company Name (*)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Company Name <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
-                    placeholder="Company Name"
+                    placeholder="Enter your company name"
                     value={signupData.companyName}
                     onChange={(e) => setSignupData({...signupData, companyName: e.target.value})}
-                    className="w-full px-0 py-2 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Full Name (*)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
-                    placeholder="Full Name"
+                    placeholder="Enter your full name"
                     value={signupData.name}
                     onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                    className="w-full px-0 py-2 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Email (*)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
                   <input 
                     type="email" 
-                    placeholder="E-mail"
+                    placeholder="Enter your email address"
                     value={signupData.email}
                     onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                    className="w-full px-0 py-2 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Country (*)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Country <span className="text-red-500">*</span></label>
                   <select
                     value={signupData.country}
                     onChange={(e) => setSignupData({...signupData, country: e.target.value})}
-                    className="w-full px-0 py-2 border-b border-gray-300 focus:border-gray-800 outline-none text-sm"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                     required
                   >
-                    <option value="">Select Country</option>
+                    <option value="">Select your country</option>
                     {countries.map((country, index) => (
                       <option key={index} value={country.name}>
                         {country.name}
@@ -406,14 +427,14 @@ export default function AuthPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Password (*)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password <span className="text-red-500">*</span></label>
                     <div className="relative">
                       <input 
                         type={showPassword ? "text" : "password"}
-                        placeholder="Password"
+                        placeholder="Enter password"
                         value={signupData.password}
                         onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                        className="w-full px-0 py-2 pr-8 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                         required
                         minLength={8}
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
@@ -422,7 +443,7 @@ export default function AuthPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-0 top-2 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                       >
                         {showPassword ? (
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -438,14 +459,14 @@ export default function AuthPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-2 uppercase tracking-wide">Repeat Password (*)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password <span className="text-red-500">*</span></label>
                     <div className="relative">
                       <input 
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Repeat Password"
+                        placeholder="Confirm password"
                         value={signupData.confirmPassword}
                         onChange={(e) => setSignupData({...signupData, confirmPassword: e.target.value})}
-                        className="w-full px-0 py-2 pr-8 border-b border-gray-300 focus:border-gray-800 outline-none text-sm placeholder-gray-300"
+                        className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                         required
                         minLength={8}
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
@@ -454,7 +475,7 @@ export default function AuthPage() {
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-0 top-2 text-gray-400 hover:text-gray-600"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
                       >
                         {showConfirmPassword ? (
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -471,8 +492,8 @@ export default function AuthPage() {
                   </div>
                 </div>
                 
-                <div className="text-xs text-gray-500">
-                  Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.
+                <div className="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <strong>Password Requirements:</strong> Must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.
                 </div>
 
                 <div className="space-y-3">
@@ -482,16 +503,16 @@ export default function AuthPage() {
                       id="acceptTerms"
                       checked={acceptTerms}
                       onChange={(e) => setAcceptTerms(e.target.checked)}
-                      className="w-4 h-4 border-gray-300 rounded"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                     />
-                    <label htmlFor="acceptTerms" className="ml-2 text-sm text-gray-600">I have read and accept the Terms and Conditions</label>
+                    <label htmlFor="acceptTerms" className="ml-2 text-sm text-gray-700 font-medium">I have read and accept the Terms and Conditions</label>
                   </div>
                 </div>
 
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 >
                   {loading ? 'Creating Account...' : 'Create Admin Account'}
                 </button>

@@ -127,17 +127,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const resendVerification = async () => {
-    try {
-      setLoading(true);
-      const response = await authAPI.resendVerification();
-      return { success: true, message: response.message };
-    } catch (error) {
-      return { success: false, message: error.message };
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const logout = () => {
     apiUtils.logout();

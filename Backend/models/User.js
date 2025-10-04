@@ -141,6 +141,17 @@ class User {
     const result = await pool.query(query, [companyId]);
     return result.rows;
   }
+
+  static async verifyEmail(userId) {
+    const query = `
+      UPDATE users 
+      SET is_verified = TRUE, verification_code = NULL, verified_at = NOW()
+      WHERE id = $1
+      RETURNING id, name, email, role, company_id, is_verified
+    `;
+    const result = await pool.query(query, [userId]);
+    return result.rows[0];
+  }
 }
 
 module.exports = User;

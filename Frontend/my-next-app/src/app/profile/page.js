@@ -167,13 +167,23 @@ export default function ProfilePage() {
 
         {/* Error/Success Messages */}
         {error && (
-          <div className="bg-red-900/20 border border-red-500 text-red-300 px-4 py-3 rounded mb-6">
-            {error}
+          <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm mb-6">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              {error}
+            </div>
           </div>
         )}
         {success && (
-          <div className="bg-green-900/20 border border-green-500 text-green-300 px-4 py-3 rounded mb-6">
-            {success}
+          <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm mb-6">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              {success}
+            </div>
           </div>
         )}
 
@@ -183,83 +193,89 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Username *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Username <span className="text-red-500">*</span></label>
                 <input
                   type="text"
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="Enter your username"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Website</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
                 <input
                   type="url"
                   name="website"
                   value={formData.website}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="https://yourwebsite.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">First Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                 <input
                   type="text"
                   name="first_name"
                   value={formData.first_name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="Enter your first name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Last Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                 <input
                   type="text"
                   name="last_name"
                   value={formData.last_name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="Enter your last name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
                 <input
                   type="text"
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="Enter your location"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+                  placeholder="Enter your phone number"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Date of Birth</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
                 <input
                   type="date"
                   name="date_of_birth"
                   value={formData.date_of_birth}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Gender</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                 <select
                   name="gender"
                   value={formData.gender}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                 >
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
@@ -270,17 +286,17 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="mt-4">
-              <label className="block text-sm font-medium mb-2">Bio</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
               <textarea
                 name="bio"
                 value={formData.bio}
                 onChange={handleInputChange}
                 rows={4}
                 maxLength={500}
-                className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                 placeholder="Tell us about yourself..."
               />
-              <div className="text-xs text-zinc-400 mt-1">
+              <div className="text-sm text-gray-600 mt-2">
                 {formData.bio.length}/500 characters
               </div>
             </div>
@@ -291,42 +307,42 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold mb-4">Social Links</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Twitter</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
                 <input
                   type="url"
                   value={formData.social_links.twitter}
                   onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://twitter.com/username"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">LinkedIn</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
                 <input
                   type="url"
                   value={formData.social_links.linkedin}
                   onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://linkedin.com/in/username"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">GitHub</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
                 <input
                   type="url"
                   value={formData.social_links.github}
                   onChange={(e) => handleSocialLinkChange('github', e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://github.com/username"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Instagram</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
                 <input
                   type="url"
                   value={formData.social_links.instagram}
                   onChange={(e) => handleSocialLinkChange('instagram', e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
                   placeholder="https://instagram.com/username"
                 />
               </div>
@@ -338,11 +354,11 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold mb-4">Preferences</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Theme</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
                 <select
                   value={formData.preferences.theme}
                   onChange={(e) => handlePreferenceChange('theme', e.target.value)}
-                  className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 bg-white shadow-sm transition-all duration-200"
                 >
                   <option value="light">Light</option>
                   <option value="dark">Dark</option>
@@ -355,9 +371,9 @@ export default function ProfilePage() {
                   id="notifications"
                   checked={formData.preferences.notifications}
                   onChange={(e) => handlePreferenceChange('notifications', e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-zinc-700 border-zinc-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                 />
-                <label htmlFor="notifications" className="ml-2 text-sm">
+                <label htmlFor="notifications" className="ml-2 text-sm text-gray-700 font-medium">
                   Enable notifications
                 </label>
               </div>
@@ -367,9 +383,9 @@ export default function ProfilePage() {
                   id="newsletter"
                   checked={formData.preferences.newsletter}
                   onChange={(e) => handlePreferenceChange('newsletter', e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-zinc-700 border-zinc-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                 />
-                <label htmlFor="newsletter" className="ml-2 text-sm">
+                <label htmlFor="newsletter" className="ml-2 text-sm text-gray-700 font-medium">
                   Subscribe to newsletter
                 </label>
               </div>
@@ -381,7 +397,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition-all duration-200 focus:ring-4 focus:ring-blue-200"
             >
               {saving ? 'Saving...' : (profile ? 'Update Profile' : 'Create Profile')}
             </button>

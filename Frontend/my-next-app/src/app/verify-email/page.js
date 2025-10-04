@@ -73,13 +73,23 @@ export default function VerifyEmailPage() {
         <form onSubmit={handleVerify} className="space-y-6">
           {/* Error/Success Messages */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded text-sm">
-              {error}
+            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                {error}
+              </div>
             </div>
           )}
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded text-sm">
-              {success}
+            <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm font-medium shadow-sm">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                {success}
+              </div>
             </div>
           )}
 
@@ -91,8 +101,8 @@ export default function VerifyEmailPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 placeholder-gray-500 bg-white shadow-sm transition-all duration-200"
+              placeholder="Enter your email address"
               required
             />
           </div>
@@ -105,18 +115,18 @@ export default function VerifyEmailPage() {
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl tracking-widest"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-gray-900 text-center text-2xl tracking-widest shadow-sm transition-all duration-200"
               placeholder="000000"
               maxLength={6}
               required
             />
-            <p className="text-xs text-gray-500 mt-1">Enter the 6-digit code from your email</p>
+            <p className="text-sm text-gray-600 mt-2">Enter the 6-digit code from your email</p>
           </div>
 
           <button
             type="submit"
             disabled={loading || code.length !== 6}
-            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             {loading ? 'Verifying...' : 'Verify Email'}
           </button>
