@@ -322,6 +322,11 @@ export const notificationAPI = {
 // Expenses API
 export const expenseAPI = {
   // Submit new expense
+  submitExpense: async (expenseData) => {
+    const response = await fetch(`${API_BASE_URL}/expenses`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(expenseData),
   submitExpense: async (expenseData, receiptFile = null) => {
     const formData = new FormData();
     
@@ -344,6 +349,9 @@ export const expenseAPI = {
   },
 
   // Get user's expenses
+  getExpenses: async (status = null) => {
+    const params = status ? `?status=${status}` : '';
+    const response = await fetch(`${API_BASE_URL}/expenses${params}`, {
   getMyExpenses: async (filters = {}) => {
     const params = new URLSearchParams();
     Object.keys(filters).forEach(key => {
@@ -359,6 +367,9 @@ export const expenseAPI = {
     return handleResponse(response);
   },
 
+  // Get specific expense
+  getExpenseById: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
   // Get pending expenses for approval
   getPendingExpenses: async (teamOnly = false) => {
     const params = teamOnly ? '?teamOnly=true' : '';
@@ -369,6 +380,12 @@ export const expenseAPI = {
     return handleResponse(response);
   },
 
+  // Update expense
+  updateExpense: async (expenseId, expenseData) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(expenseData),
   // Approve/reject expense
   approveExpense: async (expenseId, approved, comments = '') => {
     const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/approve`, {
@@ -379,6 +396,9 @@ export const expenseAPI = {
     return handleResponse(response);
   },
 
+  // Delete expense (if draft)
+  deleteExpense: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
   // Get expense details
   getExpenseDetails: async (expenseId) => {
     const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}`, {
@@ -439,6 +459,9 @@ export const rulesAPI = {
     return handleResponse(response);
   },
 
+  // Get pending approvals (for managers/admins)
+  getPendingApprovals: async () => {
+    const response = await fetch(`${API_BASE_URL}/expenses/approvals/pending`, {
   // Get approval rules statistics
   getRulesStats: async () => {
     const response = await fetch(`${API_BASE_URL}/rules/stats`, {
@@ -448,6 +471,10 @@ export const rulesAPI = {
     return handleResponse(response);
   },
 
+  // Approve expense
+  approveExpense: async (expenseId) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/approve`, {
+      method: 'POST',
   // Get available approvers
   getApprovers: async () => {
     const response = await fetch(`${API_BASE_URL}/rules/approvers`, {
@@ -457,6 +484,12 @@ export const rulesAPI = {
     return handleResponse(response);
   },
 
+  // Reject expense
+  rejectExpense: async (expenseId, rejectionReason) => {
+    const response = await fetch(`${API_BASE_URL}/expenses/${expenseId}/reject`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ rejectionReason }),
   // Get available expense categories
   getCategories: async () => {
     const response = await fetch(`${API_BASE_URL}/rules/categories`, {
